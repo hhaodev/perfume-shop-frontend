@@ -14,7 +14,12 @@ import {
 import axios from "axios";
 import { deleteCart } from "../../ultis/DeleteCart";
 import { checkQuantity, checkTotalProducts } from "../../redux/actions";
-import { emptyCart } from "../../assets/images";
+import { emptyCart, iconUser } from "../../assets/images";
+import Dropdown from "../../admin/components/Dropdown";
+import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import ModalBox from "../../admin/components/Modal";
+import { Input } from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 const Navbar = () => {
   const [modalSearch, setModalSearch] = useState(false);
   const dispatch = useDispatch();
@@ -31,10 +36,8 @@ const Navbar = () => {
   useEffect(() => {
     setCurrentUser(user);
   }, [user]);
-
   //Get quantityCart from Store in Redux
   const productsCart = useSelector(checkQuantitySelector);
-  // const productLocal = JSON.parse(localStorage.getItem("carts"));
   const [quantityCart, setQuantityCart] = useState(1);
   useEffect(() => {
     setQuantityCart(productsCart.length);
@@ -64,6 +67,137 @@ const Navbar = () => {
   useEffect(() => {
     dispatch(checkTotalProducts(infoProducts));
   }, [infoProducts]);
+
+  const [edit, setEdit] = useState(false);
+  const handleEditInfoUser = () => {
+    setEdit((pre) => !pre);
+  };
+  const [checkPass, setCheckPass] = useState("");
+  const handleCurrentPass = (e) => {
+    const data = {
+      email: currentUser.infoUser.email,
+      password: e.target.value,
+    };
+    const checkPass = async () => {
+      try {
+        const response = await axios({
+          method: "POST",
+          url: "http://localhost:8080/api/v1/auth/login",
+          data: data,
+          headers: { "Content-Type": "application/json" },
+        });
+        setCheckPass(response.data.status);
+      } catch (error) {
+        setCheckPass(error.response.data.status);
+      }
+    };
+    checkPass();
+  };
+  const [newPass, setNewPass] = useState("")
+  const handleChangePass = () => {
+    const newData = {
+      email: currentUser.infoUser.email,
+      password: newPass,
+    };
+    const changePass = async () => {
+      try {
+        const response = await axios({
+          method: "POST",
+          url: "http://localhost:8080/api/v1/auth/current_user/change_pass",
+          data: newData,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    changePass();
+  }
+  const formEditUser = (
+    <form className="form__container">
+      <div className="form__image">
+        <img src={iconUser} alt="" />
+      </div>
+      <div className="form__input">
+        <div className="input__name">
+          <span>Username :</span>
+          <Input className="input" value={currentUser.infoUser.name} disabled />
+        </div>
+        <div className="input__email">
+          <span>Email :</span>
+          <Input
+            className="input"
+            value={currentUser.infoUser.email}
+            disabled
+          />
+        </div>
+        <div className="btn_edit" onClick={handleEditInfoUser}>
+          Change password
+        </div>
+        {edit && (
+          <div className="form__edit-password">
+            <div className="password__old">
+              <span>Current password :</span>
+              <Input.Password
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+                placeholder="Type current password..."
+                className="input"
+                onBlur={handleCurrentPass}
+              />
+            </div>
+            {checkPass === "error" ? (
+              <div style={{ color: "red" }}>Mật khẩu không đúng !</div>
+            ) : checkPass === "success" ? (
+              <div style={{ color: "green" }}>Mật khẩu chính xác !</div>
+            ): null}
+            
+            <div className="password__new">
+              <span>New password :</span>
+              <Input.Password
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+                placeholder="Type new password..."
+                className="input"
+                onChange={(e) => setNewPass(e.target.value)}
+              />
+            </div>
+            <div className="btn_save" onClick={handleChangePass}>
+              Save
+            </div>
+          </div>
+        )}
+      </div>
+    </form>
+  );
+  const dropdownUser = [
+    {
+      label: (
+        <ModalBox
+          title="PROFILE USER"
+          icon={
+            <>
+              <UserOutlined />
+            </>
+          }
+          label="Profile"
+          content={formEditUser}
+        />
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <Link to="login">
+          <LogoutOutlined />
+          <span style={{ marginLeft: "8px" }}>Logout</span>
+        </Link>
+      ),
+      key: "2",
+    },
+  ];
   return (
     <div className="navbar">
       <div className="burger">
@@ -83,14 +217,6 @@ const Navbar = () => {
           to="/style"
           className="navbar__list-item"
         >
-          <div className="sub__menu">
-            <Link to="/style/men" className="sub__menu-item">
-              <span></span>Men
-            </Link>
-            <Link to="/style/women" className="sub__menu-item">
-              <span></span>Women
-            </Link>
-          </div>
           Style
         </NavLink>
         <NavLink to="/" className="navbar__list-item logo">
@@ -164,11 +290,10 @@ const Navbar = () => {
             </NavLink>
           </div>
         ) : (
-          <div className="info__user">
-            <span className="info__user-name">
-              Hello, {currentUser.infoUser.name}!
-            </span>
-          </div>
+          <Dropdown
+            label={`Hello, ${currentUser.infoUser.name}`}
+            items={dropdownUser}
+          ></Dropdown>
         )}
         <div className="btn__search">
           <BsSearch size={25} className="btn__item" onClick={showModalSearch} />

@@ -1,8 +1,7 @@
-
 import { BsHeart } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
 import { Link } from "react-router-dom";
-import { checkIsAddToCart, checkQuantity} from "../../redux/actions";
+import { checkIsAddToCart, checkQuantity } from "../../redux/actions";
 import AddToCard from "../../ultis/AddCardToLocal";
 import LoadingSkeleton from "./Loading/LoadingSkeleton";
 import "./product.scss";

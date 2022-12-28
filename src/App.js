@@ -8,6 +8,7 @@ import { publicRoutes } from "./Routes/index.js";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { checkQuantity, checkTotalProducts, checkUser } from "./redux/actions";
+import AdminLayout from "./admin/AdminLayout";
 function App() {
   const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("token")) || {};
@@ -39,7 +40,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         {publicRoutes.map((route, index) => {
-          const Layout = route.layout === null ? Fragment : DefaultLayout;
+          const Layout =
+            route.layout === null
+              ? Fragment
+              : route.layout === "admin"
+              ? AdminLayout
+              : DefaultLayout;
           const Page = route.component;
           return (
             <Route

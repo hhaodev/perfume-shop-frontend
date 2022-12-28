@@ -6,6 +6,8 @@ import "./login.scss";
 import { useDispatch } from "react-redux";
 import { checkUser } from "../../redux/actions";
 import { BiErrorCircle } from "react-icons/bi";
+import { Input } from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 const Login = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
@@ -15,6 +17,7 @@ const Login = () => {
   });
   const [currentUser, setCurrentUser] = useState([]);
   const handelSubmit = async (e) => {
+    console.log(errors);
     e.preventDefault();
     try {
       const response = await axios({
@@ -27,8 +30,8 @@ const Login = () => {
       setCurrentUser(response.data.status);
       localStorage.setItem("token", JSON.stringify(response.data.data.token));
     } catch (error) {
-      console.log(error.response.data.message);
-      setErrors(error.response.data.message);
+      console.log(error.response.data);
+      setErrors(error.response.data.data.message);
     }
   };
   const handelInput = (e) => {
@@ -39,40 +42,48 @@ const Login = () => {
   return (
     <div className="login__form">
       <div className="container__form">
-        <div className="errors__box">
-          {errors &&
-            errors.map((error, index) => (
-              <div className="errors__box-item">
-                <BiErrorCircle color="red" />
-                <p key={index} className="errors__item-title">
-                  {error.message}
-                </p>
-              </div>
-            ))}
-        </div>
+        {errors.length === 0 ? null : (
+          <div className="errors__box">
+            <div className="errors__box-item">
+              <BiErrorCircle color="red" size={20} />
+              <span
+                className="errors__item-title"
+                style={{ color: "red", marginLeft: "8px", fontSize: "14px" }}
+              >
+                {errors}
+              </span>
+            </div>
+          </div>
+        )}
         <h3 className="title__login">Wellcome back, friend!</h3>
         <form className="form__input" onSubmit={handelSubmit}>
           {currentUser === "success" && <Navigate to="/" replace={true} />}
-          <div className="input__item">
-            <InputField
-              type="email"
-              placeholder="Email..."
-              name="email"
-              value={formData.name}
-              onChange={handelInput}
-            ></InputField>
-          </div>
-
-          <div className="input__item">
-            <InputField
-              type="password"
-              placeholder="Password..."
-              name="password"
-              value={formData.name}
-              onChange={handelInput}
-            ></InputField>
-          </div>
-
+          <Input
+            placeholder="Email..."
+            type="email"
+            name="email"
+            value={formData.name}
+            onChange={handelInput}
+          />
+          {formData.email === "" ? (
+            <div style={{ color: "red", fontSize: "12px" }}>
+              Vui lòng nhập Email
+            </div>
+          ) : null}
+          <Input.Password
+            placeholder="Password"
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
+            name="password"
+            value={formData.name}
+            onChange={handelInput}
+          />
+          {formData.password === "" ? (
+            <div style={{ color: "red", fontSize: "12px" }}>
+              Vui lòng nhập Password
+            </div>
+          ) : null}
           <div className="input__check">
             <input type="checkbox" name="checkbox" />
             <span>

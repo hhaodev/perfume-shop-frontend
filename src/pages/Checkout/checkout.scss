@@ -139,6 +139,7 @@ $main-color : #EAAA85;
                 display: flex;
                 align-items: center;
                 gap: 30px;
+                
                 &-img{
                     width: 70px;
                     height: 70px;
@@ -159,6 +160,9 @@ $main-color : #EAAA85;
                         color: #333;
                         font-size: 1.4rem;
                     }
+                }
+                .btn__cart-delete{
+                    cursor: pointer;
                 }
             }
         }

@@ -9,6 +9,7 @@ import {
   checkIsAddToCartSelector,
   checkQuantitySelector,
   checkTotalProductsSelector,
+  checkUserSelector,
 } from "../../redux/selector";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,6 +23,7 @@ import { deleteCart } from "../../ultis/DeleteCart";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { to_vietnamese } from "@devjoyvn/convert-number-vn";
+import { useNavigate } from "react-router-dom";
 const ViewCart = () => {
   const [infoProducts, setInfoProducts] = useState([]);
   const productsCart = useSelector(checkQuantitySelector);
@@ -60,6 +62,10 @@ const ViewCart = () => {
   const handleUpdate = () => {
     dispatch(checkTotalProducts(infoProducts));
     localStorage.setItem("carts", JSON.stringify(productsCart));
+  };
+  const navigate = useNavigate();
+  const handleCheckout = () => {
+    navigate("/checkout");
   };
   return (
     <>
@@ -158,7 +164,9 @@ const ViewCart = () => {
             <h3 className="cart__total-heading">Total</h3>
             <span className="cart__total-price">{total} VND</span>
           </div>
-          <div className="cart__total-checkout">Proceed to checkout</div>
+          <div className="cart__total-checkout" onClick={handleCheckout}>
+            Proceed to checkout
+          </div>
         </div>
       </div>
     </>

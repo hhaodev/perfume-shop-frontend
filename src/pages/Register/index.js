@@ -29,7 +29,7 @@ const Register = () => {
       setCurrentUser(response.data.status);
       localStorage.setItem("token", JSON.stringify(response.data.data.token));
     } catch (error) {
-      // console.log(error.response.data.message);
+      console.log(error.response.data.message);
       setErrors(error.response.data.message);
     }
   };
@@ -46,11 +46,9 @@ const Register = () => {
         <div className="errors__box">
           {errors &&
             errors.map((error, index) => (
-              <div className="errors__box-item">
+              <div className="errors__box-item" key={index}>
                 <BiErrorCircle color="red" />
-                <p key={index} className="errors__item-title">
-                  {error.message}
-                </p>
+                <p className="errors__item-title">{error.message}</p>
               </div>
             ))}
         </div>

@@ -5,14 +5,6 @@ import banner2 from "../../assets/images/home2-banner-2.jpg";
 import AboutImg from "../../assets/images/home2-video-placeholder.jpg";
 import { BsPlay, BsCheckCircleFill } from "react-icons/bs";
 import {
-  david,
-  david50,
-  elyzabeth,
-  elyzabeth50,
-  esther,
-  levi,
-  keziah,
-  naomi,
   productHot,
   productHotBanner,
   flower3,
@@ -42,7 +34,6 @@ const Home = () => {
         method: "get",
         url: `http://localhost:8080/api/v1/products/`,
       });
-      console.log(response.data.data);
       setProducts(response.data.data);
     };
     getProductsSeller();

@@ -18,6 +18,7 @@ import hero from "./hero.jpg";
 import productNewItem from "./new-product-style.jpg";
 import emptyCart from "./empty_cart.png";
 import bannerCart from "./bannercarts.jpg";
+import iconUser from "./icon_user.png";
 export {
   david,
   david50,
@@ -39,4 +40,5 @@ export {
   productNewItem,
   emptyCart,
   bannerCart,
+  iconUser,
 };
