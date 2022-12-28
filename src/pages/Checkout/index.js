@@ -85,7 +85,7 @@ const Checkout = () => {
       });
     };
     createInfoCheckout();
-    navigate("/transaction");
+    // navigate("/transaction");
   };
   const handleChangeInfo = (e) => {
     const { name, value } = e.target;

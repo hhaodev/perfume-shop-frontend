@@ -1,26 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, Radio, Space, Table, Tag } from "antd";
 import ModalBox from "../Modal";
 import { DeleteOutlined, FormOutlined } from "@ant-design/icons";
 const { Column, ColumnGroup } = Table;
 
 const App = ({ data }) => {
+  const [infoUserChange, setInfoUserChange] = useState({
+    fName: "",
+    lName: "",
+    street: "",
+    status: false,
+  });
   const handleChange = (value) => {
     console.log(`selected ${value}`);
+  };
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInfoUserChange((pre) => ({
+      ...pre,
+      [name]: value,
+    }));
+  };
+  const handleSave = () => {
+    console.log(infoUserChange);
   };
   const modalEdit = (record) => (
     <div className="form__edit">
       <Form.Item label="First Name">
-        <Input placeholder={record.fName} />
+        <Input placeholder={record.fName} name="fName" onChange={handleInput} />
       </Form.Item>
       <Form.Item label="Last Name">
-        <Input placeholder={record.lName} />
+        <Input placeholder={record.lName} name="lName" onChange={handleInput} />
       </Form.Item>
       <Form.Item label="Address">
-        <Input placeholder={record.street} />
+        <Input
+          placeholder={record.street}
+          name="street"
+          onChange={handleInput}
+        />
       </Form.Item>
       <Form.Item label="Status">
-        <Radio.Group defaultValue={record.status ? "true" : "false"}>
+        <Radio.Group
+          defaultValue={record.status ? "true" : "false"}
+          name="status"
+          onChange={handleInput}
+        >
           <Radio value="false">
             <Tag color="yellow">Pending</Tag>
           </Radio>
@@ -29,7 +53,10 @@ const App = ({ data }) => {
           </Radio>
         </Radio.Group>
       </Form.Item>
-      <Button style={{ backgroundColor: "#1677FF", color: "white" }}>
+      <Button
+        style={{ backgroundColor: "#1677FF", color: "white" }}
+        onClick={handleSave}
+      >
         Save
       </Button>
     </div>
