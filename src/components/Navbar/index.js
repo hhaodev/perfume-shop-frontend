@@ -19,7 +19,11 @@ import Dropdown from "../../admin/components/Dropdown";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import ModalBox from "../../admin/components/Modal";
 import { Input } from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  ContainerOutlined,
+} from "@ant-design/icons";
 const Navbar = () => {
   const [modalSearch, setModalSearch] = useState(false);
   const dispatch = useDispatch();
@@ -93,7 +97,7 @@ const Navbar = () => {
     };
     checkPass();
   };
-  const [newPass, setNewPass] = useState("")
+  const [newPass, setNewPass] = useState("");
   const handleChangePass = () => {
     const newData = {
       email: currentUser.infoUser.email,
@@ -112,7 +116,7 @@ const Navbar = () => {
       }
     };
     changePass();
-  }
+  };
   const formEditUser = (
     <form className="form__container">
       <div className="form__image">
@@ -151,8 +155,8 @@ const Navbar = () => {
               <div style={{ color: "red" }}>Mật khẩu không đúng !</div>
             ) : checkPass === "success" ? (
               <div style={{ color: "green" }}>Mật khẩu chính xác !</div>
-            ): null}
-            
+            ) : null}
+
             <div className="password__new">
               <span>New password :</span>
               <Input.Password
@@ -190,13 +194,23 @@ const Navbar = () => {
     },
     {
       label: (
+        <Link to="/user/order">
+          <ContainerOutlined />
+          <span style={{ marginLeft: "8px" }}>Order</span>
+        </Link>
+      ),
+      key: "2",
+    },
+    {
+      label: (
         <Link to="login">
           <LogoutOutlined />
           <span style={{ marginLeft: "8px" }}>Logout</span>
         </Link>
       ),
-      key: "2",
+      key: "3",
     },
+    
   ];
   return (
     <div className="navbar">

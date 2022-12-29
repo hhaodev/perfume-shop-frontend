@@ -1,5 +1,21 @@
 import { Steps } from "antd";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 const Transaction = () => {
+  const idOrder = useParams();
+  const [getChẹckout, setGetCheckout] = useState({});
+  useEffect(() => {
+    const getCheckout = async () => {
+      const response = await axios({
+        method: "GET",
+        url: `http://localhost:8080/api/v1/checkout/${idOrder.id}`,
+      });
+      console.log(response.data.data);
+      setGetCheckout(response.data.data);
+    };
+    getCheckout();
+  }, []);
   return (
     <>
       <div
@@ -11,7 +27,8 @@ const Transaction = () => {
         }}
       >
         <Steps
-          current={0}
+          current={getChẹckout.status ? 1 : 0}
+          style={{ padding: "0 10px" }}
           items={[
             {
               title: "Pending",
@@ -20,10 +37,6 @@ const Transaction = () => {
             {
               title: "Confirmed",
               description: "Order confirmed",
-            },
-            {
-              title: "Delivery",
-              description: "The order has been given to the carrier",
             },
           ]}
         />

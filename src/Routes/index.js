@@ -14,6 +14,8 @@ import Account from "../admin/pages/Account";
 import Setting from "../admin/pages/Setting";
 import Transaction from "../admin/pages/Transaction";
 import StepTransaction from "../components/Transaction";
+import Order from "../pages/Order";
+import Result from "../components/Result";
 const publicRoutes = [
   { path: "/", component: Home },
   { path: "/style", component: Style },
@@ -25,7 +27,9 @@ const publicRoutes = [
   { path: "/products/:id", component: ProductPage },
   { path: "/carts", component: ViewCart },
   { path: "/checkout", component: Checkout },
-  { path: "/transaction", component: StepTransaction },
+  { path: "/checkout/result", component: Result },
+  { path: "/transaction/:id", component: StepTransaction },
+  { path: "/user/order", component: Order },
   { path: "/admin/dashboard", component: Dashboard, layout: "admin" },
   { path: "/admin/transaction", component: Transaction, layout: "admin" },
   { path: "/admin/product", component: Product, layout: "admin" },

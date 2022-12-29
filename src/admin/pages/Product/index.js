@@ -186,6 +186,7 @@ const Product = () => {
                 src={record.url}
                 alt={record.name}
                 className="product__img"
+                style={{ width: "150px", height: "150px" }}
               />
             </>
           )}
