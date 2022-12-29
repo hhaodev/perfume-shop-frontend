@@ -8,7 +8,6 @@ const { Column, ColumnGroup } = Table;
 const App = ({ data, handleReload, isReload }) => {
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [form] = Form.useForm();
-  console.log(data);
 
   const onFinishEdit = async (values) => {
     const response = await axios({
