@@ -12,11 +12,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   checkQuantitySelector,
   checkTotalProductsSelector,
+  checkUserSelector,
 } from "../../redux/selector";
 import { to_vietnamese } from "@devjoyvn/convert-number-vn";
 import { checkIsAddToCart, checkQuantity } from "../../redux/actions";
 import { deleteCart } from "../../ultis/DeleteCart";
 import { useNavigate } from "react-router-dom";
+import { Button, Form, Input, Select } from "antd";
+import { useForm } from "antd/es/form/Form";
+import TextArea from "antd/es/input/TextArea";
 const Checkout = () => {
   //Show products in Local
   const productsCart = useSelector(checkQuantitySelector);
@@ -55,17 +59,12 @@ const Checkout = () => {
     };
     getCountry();
   }, []);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const getCountryId = value;
+  const handleChange = (value, rest) => {
+    const getCountryId = rest.idCountry;
     const getStateData = country.find(
       (country) => country.code === getCountryId
     );
     setStateData(getStateData.districts);
-    setInfoUser((pre) => ({
-      ...pre,
-      [name]: getStateData.name,
-    }));
   };
   const [toggleCoupon, setToggleCoupon] = useState(false);
 
@@ -73,8 +72,21 @@ const Checkout = () => {
     setToggleCoupon(!toggleCoupon);
   };
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
-    let bills = infoUser;
+  const user = useSelector(checkUserSelector);
+
+  const total = useSelector(checkTotalProductsSelector);
+  // Delete product in Cart
+  const dispatch = useDispatch();
+  const handleDelete = (e) => {
+    const productId = e.currentTarget.dataset.id;
+    dispatch(checkQuantity(deleteCart(productId)));
+    // dispatch(checkIsAddToCart(true));
+  };
+  const [form] = Form.useForm();
+
+  const onFinishEdit = (values) => {
+    let bills = values;
+    bills.userId = user.infoUser._id;
     bills.orders = infoProducts;
     const createInfoCheckout = async () => {
       const response = await axios({
@@ -85,22 +97,7 @@ const Checkout = () => {
       });
     };
     createInfoCheckout();
-    // navigate("/transaction");
-  };
-  const handleChangeInfo = (e) => {
-    const { name, value } = e.target;
-    setInfoUser((pre) => ({
-      ...pre,
-      [name]: value,
-    }));
-  };
-  const total = useSelector(checkTotalProductsSelector);
-  // Delete product in Cart
-  const dispatch = useDispatch();
-  const handleDelete = (e) => {
-    const productId = e.currentTarget.dataset.id;
-    dispatch(checkQuantity(deleteCart(productId)));
-    // dispatch(checkIsAddToCart(true));
+    navigate("/checkout/result");
   };
   return (
     <>
@@ -134,112 +131,138 @@ const Checkout = () => {
           <div className="detail__container">
             <div className="detail__container-left">
               <h3 className="detail__form-title">Billing details</h3>
-              <form className="detail__form">
+              <Form
+                form={form}
+                name="basic"
+                labelCol={{
+                  span: 6,
+                }}
+                wrapperCol={{
+                  span: 18,
+                }}
+                onFinish={onFinishEdit}
+                autoComplete="off"
+              >
                 <div className="input__fullname">
-                  <TextField
-                    id="outlined-basic"
+                  <Form.Item
                     label="First Name"
-                    variant="filled"
-                    className="input__firstname input__item"
-                    inputProps={{ style: { fontSize: 16 } }}
-                    InputLabelProps={{ style: { fontSize: 16 } }}
                     name="fName"
-                    value={infoUser.firstName}
-                    onChange={handleChangeInfo}
-                  />
-                  <TextField
-                    id="outlined-basic"
-                    label="Last name"
-                    variant="filled"
-                    className="input__lastname input__item"
-                    inputProps={{ style: { fontSize: 16 } }}
-                    InputLabelProps={{ style: { fontSize: 16 } }}
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Type first name..." />
+                  </Form.Item>
+                  <Form.Item
+                    label="Last Name"
                     name="lName"
-                    value={infoUser.lastName}
-                    onChange={handleChangeInfo}
-                  />
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Type last name..." />
+                  </Form.Item>
                 </div>
-                <TextField
-                  id="outlined-select-country"
-                  select
-                  name="country"
+
+                <Form.Item
                   label="Select Country"
-                  onChange={handleChange}
-                  className="input__country input__item"
-                  inputProps={{ style: { fontSize: 16 } }}
-                  InputLabelProps={{ style: { fontSize: 16 } }}
+                  name="country"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  {Object.entries(country).map((state, index) => {
-                    return (
-                      <MenuItem key={index} value={state[1].code}>
-                        {state[1].name}
-                      </MenuItem>
-                    );
-                  })}
-                </TextField>
-                <TextField
-                  id="outlined-select-states"
-                  select
+                  <Select
+                    placeholder="Select country..."
+                    onChange={handleChange}
+                  >
+                    {Object.entries(country).map((state, index) => {
+                      return (
+                        <Select.Option
+                          value={state[1].name}
+                          key={index}
+                          idCountry={state[1].code}
+                        >
+                          {state[1].name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
                   label="Select States"
-                  className="input__states input__item"
-                  inputProps={{ style: { fontSize: 16 } }}
-                  InputLabelProps={{ style: { fontSize: 16 } }}
                   name="state"
-                  onChange={handleChangeInfo}
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  {stateData.map((state, index) => {
-                    return (
-                      <MenuItem key={index} value={state.name}>
-                        {state.name}
-                      </MenuItem>
-                    );
-                  })}
-                </TextField>
-                <TextField
-                  id="outlined-basic"
-                  label="Street name"
-                  variant="filled"
-                  className="input__street input__item"
-                  inputProps={{ style: { fontSize: 16 } }}
-                  InputLabelProps={{ style: { fontSize: 16 } }}
+                  <Select placeholder="Select States...">
+                    {stateData.map((state, index) => {
+                      return (
+                        <Select.Option value={state.name} key={index}>
+                          {state.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Street"
                   name="street"
-                  value={infoUser.street}
-                  onChange={handleChangeInfo}
-                />
-                <TextField
-                  id="outlined-basic"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input placeholder="Type street..." />
+                </Form.Item>
+                <Form.Item
                   label="Phone"
-                  variant="filled"
-                  className="input__phone input__item"
-                  inputProps={{ style: { fontSize: 16 } }}
-                  InputLabelProps={{ style: { fontSize: 16 } }}
                   name="phone"
-                  value={infoUser.phone}
-                  onChange={handleChangeInfo}
-                />
-                <TextField
-                  id="outlined-basic"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input placeholder="Type phone..." />
+                </Form.Item>
+                <Form.Item
                   label="Email"
-                  variant="filled"
-                  className="input__email input__item"
-                  type="email"
-                  inputProps={{ style: { fontSize: 16 } }}
-                  InputLabelProps={{ style: { fontSize: 16 } }}
                   name="email"
-                  value={infoUser.email}
-                  onChange={handleChangeInfo}
-                />
-              </form>
-              <h3 className="detail__form-title heading__margin">
-                Additional information
-              </h3>
-              <textarea
-                cols="30"
-                rows="5"
-                className="input__notes"
-                placeholder="Order notes..."
-                name="notes"
-              ></textarea>
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input placeholder="Type email..." type="email" />
+                </Form.Item>
+
+                <h3 className="detail__form-title heading__margin">
+                  Additional information
+                </h3>
+                <Form.Item label="Order note">
+                  <TextArea rows={4} />
+                </Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ height: "50px", margin: "0 auto" }}
+                >
+                  PLACE ORDER
+                </Button>
+              </Form>
             </div>
             <div className="detail__container-right">
               <h3 className="detail__form-title">Your order</h3>
@@ -304,9 +327,9 @@ const Checkout = () => {
                   I have read and agree to the website terms and conditions *
                 </span>
               </label>
-              <div className="detail__order-btn" onClick={handleSubmit}>
+              {/* <div className="detail__order-btn" onClick={handleSubmit}>
                 Place Order
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

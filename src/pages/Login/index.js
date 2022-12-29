@@ -6,7 +6,7 @@ import "./login.scss";
 import { useDispatch } from "react-redux";
 import { checkUser } from "../../redux/actions";
 import { BiErrorCircle } from "react-icons/bi";
-import { Input } from "antd";
+import { Form, Input } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 const Login = () => {
   const dispatch = useDispatch();
@@ -58,6 +58,7 @@ const Login = () => {
         <h3 className="title__login">Wellcome back, friend!</h3>
         <form className="form__input" onSubmit={handelSubmit}>
           {currentUser === "success" && <Navigate to="/" replace={true} />}
+
           <Input
             placeholder="Email..."
             type="email"
@@ -65,6 +66,7 @@ const Login = () => {
             value={formData.name}
             onChange={handelInput}
           />
+
           {formData.email === "" ? (
             <div style={{ color: "red", fontSize: "12px" }}>
               Vui lòng nhập Email
