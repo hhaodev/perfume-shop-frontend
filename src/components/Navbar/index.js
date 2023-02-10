@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./navbar.scss";
 import { BsHeart, BsHandbag, BsSearch } from "react-icons/bs";
 import { FaBuromobelexperte } from "react-icons/fa";
@@ -203,15 +203,21 @@ const Navbar = () => {
     },
     {
       label: (
-        <Link to="login">
+        <Link to="/login">
           <LogoutOutlined />
           <span style={{ marginLeft: "8px" }}>Logout</span>
         </Link>
       ),
       key: "3",
     },
-    
   ];
+  const navigate = useNavigate();
+  const handleViewCart = () => {
+    navigate("/carts");
+  };
+  const handleProductFavorite = () => {
+    navigate("/favorite");
+  };
   return (
     <div className="navbar">
       <div className="burger">
@@ -245,8 +251,12 @@ const Navbar = () => {
         </NavLink>
       </div>
       <div className="list__btn">
-        <BsHeart size={25} className="btn__item" />
-        <div className="btn__bag">
+        <BsHeart
+          size={25}
+          className="btn__item"
+          onClick={handleProductFavorite}
+        />
+        <div className="btn__bag" onClick={handleViewCart}>
           <BsHandbag size={25} className="btn__item" />
           <span className="number__bag">{quantityCart}</span>
           <div className="modal__bag">

@@ -39,3 +39,9 @@ export const checkTotalProducts = (payload) => {
     payload,
   };
 };
+export const checkProductFavorite = (payload) => {
+  return {
+    type: "productFavorite/checkProductFavorite",
+    payload,
+  };
+};

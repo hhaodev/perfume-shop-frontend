@@ -12,7 +12,10 @@ import { Link } from "react-router-dom";
 import Footer from "../../components/Footer";
 import ToastSuccess from "../../components/Toast/toastSuccess";
 import { useDispatch, useSelector } from "react-redux";
-import { checkIsAddToCartSelector } from "../../redux/selector";
+import {
+  checkIsAddToCartSelector,
+  checkProductFavoriteSelector,
+} from "../../redux/selector";
 import { checkIsAddToCart } from "../../redux/actions";
 const Style = () => {
   const [dataProduct, setDataProduct] = useState([]);
@@ -37,7 +40,8 @@ const Style = () => {
     if (!isAddToCart) return;
     setTimeout(() => dispatch(checkIsAddToCart(false)), 2000);
   }, [isAddToCart]);
-
+  // const productLike = useSelector(checkProductFavoriteSelector);
+  // console.log(productLike);
   return (
     <>
       <BannerPage heading="All Perfume" title="Shop catalog" img={hero} />

@@ -7,7 +7,6 @@ $primary-color : #eaaa85;
         display: flex;
         gap: 30px;
         justify-content: space-between;
-
         .products__list{
             flex: 1;
             .products__list-catalog{
@@ -41,8 +40,9 @@ $primary-color : #eaaa85;
             .products__content{
                 margin-top: 50px;
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-start;
                 flex-wrap: wrap;
+                gap: 20px;
             }
         }
         .products__sidebar{

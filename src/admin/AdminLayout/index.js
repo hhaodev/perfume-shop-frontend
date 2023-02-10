@@ -25,11 +25,11 @@ export function getItem(label, key, icon, route, children) {
   };
 }
 const items = [
-  getItem("Dashboard", "1", <PieChartOutlined />, "dashboard"),
+  // getItem("Dashboard", "1", <PieChartOutlined />, "dashboard"),
   getItem("Transaction", "2", <TeamOutlined />, "transaction"),
   getItem("Product", "3", <AppstoreAddOutlined />, "product"),
   getItem("Account", "4", <TeamOutlined />, "account"),
-  getItem("Settings", "5", <ToolOutlined />, "setting"),
+  // getItem("Settings", "5", <ToolOutlined />, "setting"),
 ];
 const dropdown = [getItem("Logout", "1", <PieChartOutlined />)];
 const AdminLayout = ({ children }) => {
@@ -59,7 +59,7 @@ const AdminLayout = ({ children }) => {
         </div>
         <Menu
           theme="dark"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["2"]}
           mode="inline"
           // items={items}
         >

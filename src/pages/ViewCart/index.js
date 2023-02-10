@@ -24,6 +24,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { to_vietnamese } from "@devjoyvn/convert-number-vn";
 import { useNavigate } from "react-router-dom";
+import { Empty } from "antd";
 const ViewCart = () => {
   const [infoProducts, setInfoProducts] = useState([]);
   const productsCart = useSelector(checkQuantitySelector);
@@ -133,7 +134,7 @@ const ViewCart = () => {
                   );
                 })
               ) : (
-                <h3>Không có sản phẩm nào được thêm vào túi</h3>
+                <Empty style={{ margin: "40px 0" }} />
               )}
             </div>
 

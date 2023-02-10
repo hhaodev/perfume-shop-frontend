@@ -97,6 +97,7 @@ const Checkout = () => {
       });
     };
     createInfoCheckout();
+    localStorage.setItem("carts", JSON.stringify([]));
     navigate("/checkout/result");
   };
   return (

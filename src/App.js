@@ -9,6 +9,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { checkQuantity, checkTotalProducts, checkUser } from "./redux/actions";
 import AdminLayout from "./admin/AdminLayout";
+import PageNotFound from "./pages/NotFound";
 function App() {
   const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("token")) || {};
@@ -59,6 +60,7 @@ function App() {
             />
           );
         })}
+         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

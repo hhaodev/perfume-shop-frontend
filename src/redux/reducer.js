@@ -5,6 +5,7 @@ const initState = {
   quantityCart: [],
   isAddToCart: false,
   totalProducts: 0,
+  productFavorite: [],
 };
 
 const rootReducer = (state = initState, action) => {
@@ -73,6 +74,26 @@ const rootReducer = (state = initState, action) => {
       return {
         ...state,
         totalProducts: total,
+      };
+    case "productFavorite/checkProductFavorite":
+      let currentProduct = state.productFavorite;
+      let productsFavorite = currentProduct;
+      const newProductFavorite = action.payload;
+      if (productsFavorite.length < 0) {
+        productsFavorite = [newProductFavorite];
+      } else {
+        const indexProduct = productsFavorite.findIndex((product) => {
+          return product.idProduct === newProductFavorite.idProduct;
+        });
+        if (indexProduct === -1) {
+          productsFavorite = [...productsFavorite, newProductFavorite];
+        } else {
+          productsFavorite = [...productsFavorite];
+        }
+      }
+      return {
+        ...state,
+        productFavorite: productsFavorite,
       };
     default:
       return state;

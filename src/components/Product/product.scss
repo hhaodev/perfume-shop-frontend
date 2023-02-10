@@ -2,7 +2,7 @@ $primary-color: #81C1BE;
 .product__item{
     // width: calc( calc(100% / 4) - 20px);
     margin-bottom: 50px;
-    max-height: 400px;
+    min-height: 200px;
     box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
     position: relative;
     cursor: pointer;
@@ -82,4 +82,10 @@ $primary-color: #81C1BE;
         top: 10px;
         right: 10px;
     }
+}
+.message__favorite{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 99;
 }
